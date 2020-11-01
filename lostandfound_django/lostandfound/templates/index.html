@@ -1,0 +1,31 @@
+{% extends 'master.html' %}
+{% block title %}Home{% endblock %}
+{% block home_active %}active{% endblock %}
+{% block content %}
+    <h1>Item page</h1>
+    <h3>If you found any items click on FOUND IT!</h3>
+    <div class="row">
+    {% for i in items %}
+        <div class="card col-xs-6 col-md-3">
+          <img class="card-img-top" src="{{ i.image.url }}" alt="{{ i.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ i.title }}</h5>
+            <p class="card-text">{{ i.description }}</p>
+              {% if i.found %}
+                  <span class="badge bg-success text-light">FOUND</span>
+              {% else %}
+                  <span class="badge bg-danger text-light">NOT FOUND</span>
+                  <form method="post" action="{% url 'found' %}" style="float: right;">
+                    {% csrf_token %}
+                    <input type="hidden" name="item" value="{{ i.pk }}"/>
+                    <button type="submit" class="btn btn-sm btn-success">FOUND IT!</button>
+                  </form>
+              {% endif %}
+          </div>
+        <div class="card-footer">
+            <a href="{{ i.get_absolute_url }}" class="btn btn-primary btn-block">READ MORE</a>
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
